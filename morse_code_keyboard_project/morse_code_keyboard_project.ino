@@ -32,26 +32,37 @@ void dash(){
   delay(SYMBOL_PAUSE);
 }
 
+
+bool isLetter(char c){
+  return c >= 'A' && c <= 'Z';
+}
+
+bool isDigit(char c){
+  return  c >= '0' && c <= '9';
+}
+
+int getMorseIndex(char c){
+  if(isLetter(c))
+    return c - 'A';//letter to its Morse code by subtracting 'A' to get the index
+  else if(isDigit(c))
+    return c - '0' + 26;//digit to its Morse code by subtracting '0' and adding 26 to get the index
+  else 
+  return -1;//error value
+}
+
 //blink morse code for character
 void morseBlink(char c){
-  if(c >= 'A' || c >= 'Z'){
-    const char* morsecode = morseCodeTable[c - 'A'];
-    while(*morsecode){
-      if(*morsecode == '.') 
-        dot();
-      else if(*morsecode == '-')
-        dash();
-      morsecode++;
-    }
-  } else if( c >= '0' || c <= '9'){
-    const char* morsecode = morseCodeTable[c - '0' + 26];
-    while(*morsecode){
-      if(*morsecode == '.')
-        dot();
-      else if(*morsecode == '-')
-        dash();
-      morsecode++;
-    }
+  
+  int index = getMorseIndex(c);
+  if(index == -1) return;//invalid character
+
+  const char* morsecode = morseCodeTable[index];
+  while(*morsecode){
+    if(*morsecode == '.')
+      dot();
+    else if (*morsecode == '-')
+      dash();
+    morsecode++;
   }
 }
 
